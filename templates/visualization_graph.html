@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Candidate Similarity Visualization</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/2.3.0/alpine.js" defer></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #1a237e, #4a148c);
+        }
+        .chart-container {
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+        .chart-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <header class="gradient-bg text-white py-12 shadow-lg">
+        <div class="container mx-auto px-4">
+            <h1 class="text-4xl font-bold text-center">Candidate Similarity Visualization</h1>
+            <p class="text-xl text-center mt-4 opacity-80">Analyzing and comparing candidate profiles with precision</p>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-12">
+        <div class="bg-white rounded-lg shadow-xl overflow-hidden" x-data="{ activeTab: 'overview' }">
+            <div class="flex border-b">
+                <button @click="activeTab = 'overview'" :class="{ 'bg-blue-500 text-white': activeTab === 'overview' }" class="flex-1 py-4 px-6 text-lg font-medium focus:outline-none transition duration-300">Overview</button>
+                <button @click="activeTab = 'details'" :class="{ 'bg-blue-500 text-white': activeTab === 'details' }" class="flex-1 py-4 px-6 text-lg font-medium focus:outline-none transition duration-300">Detailed Analysis</button>
+            </div>
+
+            <div x-show="activeTab === 'overview'" class="p-6">
+                <h2 class="text-2xl font-semibold text-gray-800 mb-6">Similarity Score Comparison</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {% for image in pie_chart_images %}
+                    <div class="chart-container bg-white rounded-lg overflow-hidden shadow-md">
+                        <div class="bg-blue-500 text-white py-3 px-4">
+                            <h3 class="text-lg font-medium">Candidate {{ loop.index }}</h3>
+                        </div>
+                        <div class="p-4">
+                            <img src="{{ url_for('static', filename=image) }}" alt="Pie Chart {{ loop.index }}" class="w-full h-auto">
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div x-show="activeTab === 'details'" class="p-6">
+                <h2 class="text-2xl font-semibold text-gray-800 mb-6">Detailed Candidate Analysis</h2>
+                <p class="text-gray-600 mb-4">This section provides an in-depth look at each candidate's profile and how they compare to the ideal candidate.</p>
+                <!-- Add more detailed content here -->
+            </div>
+        </div>
+    </main>
+
+    <footer class="gradient-bg text-white py-8 mt-12">
+        <div class="container mx-auto px-4 text-center">
+            <p>&copy; Made By Hacker Group ⚡</p>
+        </div>
+    </footer>
+</body>
+</html>

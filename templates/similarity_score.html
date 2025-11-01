@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Candidate Similarity Analysis</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #f6f9fc 0%, #ffffff 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .hero-section {
+            background: linear-gradient(120deg, #4a148c 0%, #3b82f6 45%, #4a148c 100%);
+            padding: 3rem 0;
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ffffff' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
+        }
+
+        .score-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(226, 232, 240, 0.7);
+        }
+
+        .score-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+        }
+
+        .metric-primary {
+            background: linear-gradient(135deg, #dbeafe 0%, #eff6ff 100%);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .metric-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.1);
+        }
+
+        .metric-secondary {
+            background: linear-gradient(135deg, #f3f4f6 0%, #f9fafb 100%);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .metric-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .candidate-badge {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-weight: bold;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+        }
+
+        .score-value {
+            font-size: 1.75rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .metric-card {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+
+<body class="min-h-screen">
+    <div class="hero-section">
+        <div class="container mx-auto px-4 relative z-10">
+            <h1 class="text-4xl font-bold text-center text-white mb-2">Talent Match Analytics</h1>
+            <p class="text-center text-blue-100 text-lg">Advanced Candidate Similarity Analysis</p>
+        </div>
+    </div>
+
+    <div class="container mx-auto px-4 mb-12">
+        {% for i in range(resume_details|length) %}
+        <div class="score-card p-8">
+            <div class="flex justify-between items-center mb-6">
+                <div class="candidate-badge text-xl">
+                    Candidate {{ i + 1 }}
+                </div>
+                <div class="text-gray-400 text-sm">ID: #{{ '%04d' | format(i + 1) }}</div>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6 mb-6">
+                <div class="metric-primary p-6">
+                    <div class="flex items-center justify-between mb-2">
+                        <p class="text-blue-800 font-semibold">Skills Match</p>
+                        <div class="bg-blue-500 rounded-full p-1">
+                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M13 10V3L4 14h7v7l9-11h-7z" />
+                            </svg>
+                        </div>
+                    </div>
+                    <p class="score-value">{{ similarity_scores[i].skills_score }}%</p>
+                </div>
+                <div class="metric-primary p-6">
+                    <div class="flex items-center justify-between mb-2">
+                        <p class="text-blue-800 font-semibold">Education Match</p>
+                        <div class="bg-blue-500 rounded-full p-1">
+                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 14l9-5-9-5-9 5 9 5z" />
+                            </svg>
+                        </div>
+                    </div>
+                    <p class="score-value">{{ similarity_scores[i].education_score }}%</p>
+                </div>
+                <div class="metric-primary p-6">
+                    <div class="flex items-center justify-between mb-2">
+                        <p class="text-blue-800 font-semibold">Overall Match</p>
+                        <div class="bg-blue-500 rounded-full p-1">
+                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                    </div>
+                    <p class="score-value">{{ similarity_scores[i].overall_score }}%</p>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="metric-secondary p-6">
+                    <p class="text-gray-600 font-medium mb-2">Precision Score</p>
+                    <p class="score-value">{{ similarity_scores[i].precision }}</p>
+                </div>
+                <div class="metric-secondary p-6">
+                    <p class="text-gray-600 font-medium mb-2">Recall Score</p>
+                    <p class="score-value">{{ similarity_scores[i].recall }}</p>
+                </div>
+                <div class="metric-secondary p-6 ">
+                    <p class="text-gray-600 font-medium mb-2">F1 Score</p>
+                    <p class="score-value">{{ similarity_scores[i].f1 }}</p>
+                </div>
+
+                <div class="w-full">
+                    <div class="metric-primary p-6 w-full">
+                        <div class="flex items-center justify-between mb-2">
+                            <p class="text-blue-800 font-semibold">ATS Score</p>
+                            <div class="bg-blue-500 rounded-full p-1">
+                                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                </svg>
+                            </div>
+                        </div>
+                        <p class="score-value">{{ similarity_scores[i]['ATS Score'] }}%</p>
+                    </div>
+                </div>
+                <div class="metric-primary p-6">
+                    <div class="flex items-center justify-between mb-2">
+                        <p class="text-blue-800 font-semibold">BERT Similarity Score</p>
+                        <div class="bg-blue-500 rounded-full p-1">
+                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                    </div>
+                    <p class="score-value">{{ similarity_scores[i].beart_score }}</p>
+                </div>  
+
+                <div class="metric-primary p-6">
+                    <div class="flex items-center justify-between mb-2">
+                        <p class="text-blue-800 font-semibold">SBERT Score</p>
+                        <div class="bg-blue-500 rounded-full p-1">
+                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                    </div>
+                    <p class="score-value">{{ similarity_scores[i].sbert_score }}</p>
+                </div>
+            </div>
+
+            </div>
+        </div>
+        {% endfor %}
+</body>
+
+</html>

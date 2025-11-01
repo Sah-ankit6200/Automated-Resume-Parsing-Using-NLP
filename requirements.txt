@@ -1,0 +1,10 @@
+Flask
+matplotlib
+spacy
+PyMuPDF
+nltk
+requests
+scikit-learn
+beautifulsoup4
+flask-mysql-connector
+flask-bcrypt

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Non-Matching Skills</title>
+</head>
+<body>
+    <h1>Non-Matching Skills</h1>
+    <ul>
+        {% for item in non_matching_skills %}
+            <li>
+                <h2>{{ item.resume }}</h2>
+                <p>Non-Matching Skills: {{ item.non_matching_skills | join(', ') }}</p>
+            </li>
+        {% endfor %}
+    </ul>
+    <a href="{{ url_for('index') }}">Go Back</a>
+</body>
+</html>

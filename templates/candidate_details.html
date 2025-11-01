@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TalentSphere - Candidate Details</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f8fafc;
+            color: #334155;
+        }
+
+        .nav-container {
+            background: linear-gradient(90deg, #4a148c, #3498db);
+            color: white;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 10;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-link {
+            color: white;
+            padding: 0.5rem 1.5rem;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            position: relative;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            background: #f39c12;
+            bottom: -2px;
+            left: 50%;
+            transform: translateX(-50%);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 70%;
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, #3498db, #4a148c);
+            padding: 8rem 0;
+            color: white;
+            text-align: center;
+            margin-top: 64px;
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+        }
+
+        .hero-title {
+            font-size: 4rem;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            letter-spacing: -1px;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            margin-top: 1rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-button {
+            background: #f39c12;
+            color: white;
+            padding: 0.75rem 2rem;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            display: inline-block;
+            margin-top: 2rem;
+        }
+
+        .cta-button:hover {
+            background: #e67e22;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0,0,0,0.15);
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 3rem;
+            color: #2c3e50;
+        }
+
+        .candidate-card {
+            background-color: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            padding: 2rem;
+            transition: all 0.3s ease;
+            border: 1px solid #e2e8f0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .candidate-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #3498db,#4a148c);
+        }
+
+        .candidate-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        .candidate-name {
+            color: #3498db;
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .info-label {
+            color: #7f8c8d;
+            font-weight: 600;
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        .info-value {
+            color: #2c3e50;
+            font-weight: 500;
+        }
+
+        .skills-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .skill-tag {
+            background-color: #ecf0f1;
+            color: #3498db;
+            padding: 0.3rem 0.8rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .skill-tag:hover {
+            background-color: #3498db;
+            color: white;
+        }
+
+        .non-matching-skills {
+            color: #e74c3c;
+            font-weight: bold;
+            margin-top: 1rem;
+        }
+
+        .footer {
+            background: linear-gradient(90deg, #4a148c, #3498db);
+            color: white;
+            padding: 4rem 0;
+            margin-top: 6rem;
+        }
+
+        .footer-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .footer-link {
+            color: #ecf0f1;
+            transition: color 0.3s ease;
+        }
+
+        .footer-link:hover {
+            color: #f39c12;
+        }
+
+        .social-icon {
+            font-size: 1.5rem;
+            color: #ecf0f1;
+            margin-right: 1rem;
+            transition: color 0.3s ease;
+        }
+
+        .social-icon:hover {
+            color: #f39c12;
+        }
+
+            .chat-container {
+                max-width: 600px;
+                margin: 50px auto;
+                background: white;
+                padding: 20px;
+                border-radius: 10px;
+                box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            }
+            h2 {
+                text-align: center;
+                color: #333;
+            }
+            .form-control {
+                margin-bottom: 10px;
+                border-radius: 5px;
+            }
+            .btn-success {
+                width: 100%;
+            }
+            #response {
+                margin-top: 15px;
+                padding: 10px;
+                background: #e9ecef;
+                border-radius: 5px;
+                min-height: 50px;
+                font-size: 16px;
+            }
+
+        .chat-container {
+            margin-top: 50px;
+            width: 50%;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            background-color:  #4a148c;
+        }
+        .chat-container h2{
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        #response {
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+        }
+        .form-group {
+            margin-top: 10px;
+        }
+        .btn-success{
+            font-weight: bold;
+            font-size: 18px;
+            color: white;
+        }
+        .btn-success:hover{
+            color: #d4e052;
+
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar (preserved from original) -->
+    <nav class="nav-container p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold">JobFit Analyzer</h1>
+            <div class="space-x-4">
+                <a href="{{ url_for('index') }}" class="nav-link">Home</a>
+                <a href="{{ url_for('similarity_score') }}" class="nav-link">Similarity Score</a>
+                <a href="{{ url_for('visualization_graph') }}" class="nav-link">Visualization Graph</a>
+                <a href="{{ url_for('similarity_bar_chart') }}" class="nav-link">Similarity Bar Chart</a>
+                <a href="{{ url_for('dashboard') }}" class="nav-link">Dashboard</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container mx-auto px-4">
+            <h1 class="hero-title">Parsed Candidate Details</h1>
+            <p class="hero-subtitle">Analyze and compare candidate profiles with precision and ease.</p>
+            <a href="#candidates" class="cta-button">View Candidates</a>
+        </div>
+    </section>
+
+    <!-- Candidate Details Section -->
+    <div id="candidates" class="container mx-auto mt-24 px-4">
+        <h2 class="section-title">Our Outstanding Candidates</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {% for i in range(resume_details|length) %}
+            <div class="candidate-card">
+                <h2 class="candidate-name">{{ resume_details[i]['name'] }}</h2>
+                <div class="grid grid-cols-1 gap-4">
+                    <p><span class="info-label">Email:</span> <span class="info-value">{{ resume_details[i]['email'] }}</span></p>
+                    <p><span class="info-label">Phone:</span> <span class="info-value">{{ resume_details[i]['phone'] }}</span></p>
+                    <p><span class="info-label">Education:</span> <span class="info-value">{{ resume_details[i]['education'] }}</span></p>
+                </div>
+                <div class="mt-6">
+                    <p class="info-label">Skills:</p>
+                    <div class="skills-container">
+                        {% for skill in resume_details[i]['skills'] %}
+                        <span class="skill-tag">{{ skill }}</span>
+                        {% endfor %}
+                    </div>
+                    <p class="mt-4"><span class="info-label">Projects:</span> <span class="info-value">{{ resume_details[i]['projects'] }}</span></p>
+                    <p class="mt-2"><span class="info-label">Experience:</span> <span class="info-value">{{ resume_details[i]['experience'] }}</span></p>
+
+                    <!-- Display Non-Matching Skills -->
+                    <div class="non-matching-skills mt-4">
+                        <span class="info-label">Non-Matching Skills:</span>
+                        {% if non_matching_skills[i] %}
+                        {{ non_matching_skills[i] | join(', ') }}
+                        {% else %}
+                        None
+                        {% endif %}
+                    </div>
+                </div> 
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="chat-container">
+        <h2>Candidate Chat</h2>
+        <div id="response"></div>
+        <div class="form-group">
+            <input type="text" class="form-control" id="userInput" placeholder="Enter your question">
+        </div>
+        <button class="btn btn-success" onclick="sendMessage()">Ask!</button>
+    </div>
+
+    <script>
+        async function sendMessage() {
+            const inputField = document.getElementById('userInput');
+            const input = inputField.value;
+            const responseDiv = document.getElementById('response');
+
+            if (!input) {
+                responseDiv.innerHTML = '<p style="color: red;">⚠️ Please enter a message.</p>';
+                return;
+            }
+
+            responseDiv.innerHTML = '<p>⏳ Loading...</p>';
+            inputField.value = ""; // Clear input field after sending message
+
+            try {
+                const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        Authorization: 'Bearer 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',
+                        'HTTP-Referer': 'https://www.webstylepress.com',
+                        'X-Title': 'webStylePress',
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        model: 'deepseek/deepseek-r1:free',
+                        messages: [{ role: 'user', content: input }],
+                    }),
+                });
+
+                const data = await response.json();
+                console.log(data);
+                const markdownText = data.choices?.[0]?.message?.content || '⚠️ No response received.';
+                responseDiv.innerHTML = marked.parse(markdownText);
+            } catch (error) {
+                responseDiv.innerHTML = '<p style="color: red;">❌ Error: ' + error.message + '</p>';
+            }
+        }
+    </script>
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container mx-auto px-4 text-center">
+            <p class="text-lg">© 2024 Made By Hacker Group ⚡</p>
+            <div class="mt-4">
+                <a href="#" class="social-icon"><i class="fab fa-linkedin"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-facebook"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+    </footer>
+
+</body>
+
+</html>

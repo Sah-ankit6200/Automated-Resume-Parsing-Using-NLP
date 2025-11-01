@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>jobfitAnalyzer - AI-Powered Resume Parsing</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&family=Montserrat:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a365d;
+            --secondary: #0284c7;
+            --accent: #0ea5e9;
+            --text: #334155;
+            --background: #f8fafc;
+            --white: #ffffff;
+            --primary-color: #0b2b5c;
+            --secondary-color: #3CB8A6;
+            --accent-color: #03ff00;
+            --text-color: #333;
+            --light-bg: #f8f9fa;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        /* Navbar Styles */
+        .navbar {
+            background: var(--white);
+            padding: 1rem 5%;
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        } */
+
+        .logo {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-image {
+            width: 80px;
+            /* Adjust the size of the logo */
+            height: auto;
+            /* Maintain aspect ratio */
+            object-fit: contain;
+            /* Ensures the image doesn't get distorted */
+            border-radius: 5px;
+            /* Optional: Add slight border rounding for a smoother look */
+        }
+
+        /* Optional hover effect */
+        .logo:hover .logo-image {
+            transform: scale(1.05);
+            transition: transform 0.3s ease-in-out;
+        }
+
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+
+        .nav-links .cta-button {
+            background: var(--accent);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links .cta-button:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 8rem 5% 4rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: url('/api/placeholder/1920/1080') center/cover;
+            opacity: 0.1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .hero-text {
+            color: var(--white);
+        }
+
+        .hero-text h1 {
+            font-size: 3.5rem;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            font-weight: 800;
+        }
+
+        .hero-text p {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .hero-image {
+            position: relative;
+        }
+
+        .hero-image img {
+            width: 120%;
+            border-radius: 12px;
+        }
+
+
+
+
+
+
+
+
+
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .cta-button {
+            display: inline-block;
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+            animation: fadeInUp 1s ease-out 1.5s;
+            animation-fill-mode: both;
+        }
+
+        .cta-button:hover {
+            background-color: var(--accent-color);
+            transform: translateY(-3px);
+            box-shadow: 0 4px 10px rgba(60, 184, 166, 0.3);
+        }
+
+        .features {
+            padding: 5rem 10%;
+            background-color: var(--light-bg);
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: var(--primary-color);
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-card h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+        }
+
+        .video-section {
+            background-color: var(--primary-color);
+            padding: 5rem 10%;
+            text-align: center;
+            color: white;
+        }
+
+        .video-container {
+            max-width: 1200px;
+            margin: 2rem auto 0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .video-player {
+            width: 100%;
+            display: block;
+        }
+
+        .testimonials {
+            padding: 5rem 10%;
+            background-color: var(--light-bg);
+        }
+
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .testimonial-card {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 1rem;
+        }
+
+        .testimonial-author {
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        footer {
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin-right: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-links {
+            list-style: none;
+            display: flex;
+            /* margin-left: auto; */
+            margin-right: 0%;
+            gap: 1rem;
+        }
+
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+        }
+
+        /* Styles for data frame */
+        .data-frame {
+            display: flex;
+            flex-direction: column;
+            /* Display text above and data frames below */
+            justify-content: center;
+            align-items: center;
+            margin-top: 50px;
+            padding: 20px;
+            background-color: #f8f8f8;
+            border-radius: 0px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .data-frame h2,
+        .data-frame p {
+            text-align: center;
+            color: #0b2b5c;
+            margin: 20px 0;
+            /* Adds space around heading */
+            font-size: 45px;
+        }
+
+        .data-frame p {
+            line-height: 1.5;
+            font-size: 20px;
+        }
+
+        .small-data-frames-container {
+            display: flex;
+            flex-direction: row;
+            /* Ensure small frames are in a row */
+            justify-content: center;
+            gap: 20px;
+            /* Space between the small data frames */
+        }
+
+        .small-data-frame {
+            flex: 1;
+            display: flex;
+            /* To enable image and text side by side */
+            align-items: center;
+            gap: 20px;
+            margin: 30px;
+            padding: 30px;
+            background-color: #e0e0e0;
+            border-radius: 15px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+            max-width: 400px;
+            /* Adjust width */
+        }
+
+        .small-data-frame img {
+            width: 50%;
+            /* Adjust image size */
+            height: auto;
+            border-radius: 5px;
+        }
+
+        .small-data-frame h3 {
+            margin-bottom: 10px;
+        }
+
+        .small-data-frame p {
+            font-size: 16px;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero .highlight-green {
+                font-size: 2rem;
+            }
+
+            .feature-grid,
+            .testimonial-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+
+        /* .intro-content {
+            display: flex;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+          }
+          
+          .intro-image {
+            margin-top: 50px;
+            width: 1200px;
+            height: auto;
+            border-radius: 10px;
+            margin-right: 30px;
+            margin-left: 50px;
+          } */
+
+        .intro-content {
+            display: flex;
+            justify-content: center;
+            /* Centering the image horizontally */
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            /* Optional: Add padding for better spacing */
+        }
+
+        .intro-image {
+            margin-top: 50px;
+            max-width: 100%;
+            /* Ensures image is responsive */
+            height: auto;
+            border-radius: 10px;
+
+            /* Add subtle shadow for depth */
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+
+            /* Transition effect for hover */
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+
+        .intro-image:hover {
+            /* Slight zoom effect on hover */
+            transform: scale(1.05);
+
+            /* Enhanced shadow on hover */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .section-title1 {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: var(--primary-color);
+        }
+
+
+
+        hr.animated-line {
+            border: none;
+            /* Remove default border */
+            border-top: 5px solid #333;
+            /* Bold border */
+            width: 0;
+            /* Start at 0 width */
+            margin: 20px auto;
+            /* Center it and add space above and below */
+            animation: expandLine 2s ease-in-out forwards;
+            /* Animation */
+        }
+
+        /* Keyframes for animation */
+        @keyframes expandLine {
+            0% {
+                width: 0;
+            }
+
+            50% {
+                width: 50%;
+                /* The line expands to 50% */
+            }
+
+            100% {
+                width: 80%;
+                /* The line reaches 80% width */
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <img src="https://cdn.pixabay.com/photo/2021/09/13/08/24/lion-6620633_640.png" alt="Company Logo"
+                class="logo-image">
+            <span>Jobfit Analyzer</span>
+        </div>
+
+        <div class="nav-links">
+            <a href="#features">Features</a>
+            <a href="#demo">Demo</a>
+            <a href="#about">About</a>
+            <a href="#contact">Contact</a>
+            <a href="{{ url_for('login') }}" class="cta-button">Get Started</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-text" data-aos="fade-right">
+                <h1>Transform Your Hiring Process with AI-Powered Resume Parsing</h1>
+                <p>Streamline recruitment, eliminate manual screening, and find the perfect candidates faster with our
+                    enterprise-grade resume parsing solution.</p>
+                <a href="#demo" class="cta-button">Watch Demo</a>
+            </div>
+            <div class="hero-image" data-aos="fade-left">
+                <img src="https://www.digitalresumeparser.com/assets/img/about/img-1.png" alt="Platform Demo">
+            </div>
+        </div>
+    </section>
+
+    <section class="intro-section">
+        <h2 class="section-title1">Demo Of Our Project</h2>
+        <div class="intro-content">
+            <img src="https://www.digitalresumeparser.com/assets/img/about/resume-parsing-option.gif"
+                alt="Introduction Image" class="intro-image">
+    </section>
+
+    <hr class="animated-line">
+
+    <section id="features" class="features">
+        <h2 class="section-title">Why Choose jobfitAnalyzer?</h2>
+        <div class="feature-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🎯</div>
+                <h3>Unparalleled Accuracy</h3>
+                <p>Our AI-driven parser ensures the highest level of accuracy in extracting and categorizing resume
+                    data.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3>Lightning-Fast Processing</h3>
+                <p>Parse thousands of resumes in minutes, saving your team valuable time and resources.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🧠</div>
+                <h3>Intelligent Insights</h3>
+                <p>Gain valuable data-driven insights to make smarter hiring decisions and identify top talent quickly.
+                </p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔗</div>
+                <h3>Seamless Integration</h3>
+                <p>Easily integrate with your existing ATS and HR systems for a smooth, efficient workflow.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="demo" class="video-section">
+        <h2 class="section-title">See jobfitAnalyzer in Action</h2>
+        <div class="video-container">
+            <video class="video-player" controls autoplay loop muted>
+                <source src="https://cdn.pixabay.com/video/2021/04/04/69952-533273133_tiny.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+    </section>
+
+
+
+
+    <!-- Data frame section -->
+    <div class="data-frame">
+        <h2>About Our Project</h2>
+        <p>Our project, Automated Resume Parsing with Job Description URL, is designed to simplify the hiring process,
+            by extracting key information from resumes and comparing them with job descriptions. Whether you are a job
+            seeker
+            or an employer, our tool offers a seamless way to match skills, evaluate education, and ensure compatibility
+            with job requirements.</p>
+
+        <!-- Small data frames horizontally aligned with image and text -->
+        <div class="small-data-frames-container">
+            <div class="small-data-frame">
+                <img src="https://cdn.pixabay.com/photo/2013/07/13/12/34/handbag-159884_640.png"
+                    alt="Resume Parsing Image">
+                <div>
+                    <h3>Resume Parsing</h3>
+                    <p>Automatically extract skills, education, and experience from resumes.</p>
+                </div>
+            </div>
+            <div class="small-data-frame">
+                <img src="https://cdn.pixabay.com/photo/2013/07/12/15/23/documents-149799_640.png"
+                    alt="Job Description Matching">
+                <div>
+                    <h3>Job Description Matching</h3>
+                    <p>Compare the resume with job descriptions to determine skill matches.</p>
+                </div>
+            </div>
+            <div class="small-data-frame">
+                <img src="https://cdn.pixabay.com/photo/2017/02/01/11/50/clones-2029896_640.png"
+                    alt="Data Visualization">
+                <div>
+                    <h3>Data Visualization</h3>
+                    <p>Get a detailed visual breakdown of the resume analysis results.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr class="animated-line">
+
+    <section id="testimonials" class="testimonials">
+        <h2 class="section-title">What Our Clients Say</h2>
+        <div class="testimonial-grid">
+            <div class="testimonial-card">
+                <p class="testimonial-text">"jobfitAnalyzer has revolutionized our hiring process. We've cut our resume
+                    review time by 70% and improved our quality of hires."</p>
+                <p class="testimonial-author">- Sarah Johnson, HR Director at TechCorp</p>
+            </div>
+            <div class="testimonial-card">
+                <p class="testimonial-text">"The accuracy of this tool is mind-blowing. It's like having an expert
+                    recruiter working 24/7."</p>
+                <p class="testimonial-author">- Mark Thompson, CEO of Innovate Inc.</p>
+            </div>
+            <div class="testimonial-card">
+                <p class="testimonial-text">"We've seen a significant ROI since implementing jobfitAnalyzer. It's a
+                    game-changer for any recruitment team."</p>
+                <p class="testimonial-author">- Lisa Chen, Talent Acquisition Manager at GlobalTech</p>
+            </div>
+        </div>
+    </section>
+
+
+    <footer id="contact">
+        <div class="footer-content">
+            <p>&copy; Made By Hacker Group ⚡</p>
+            <ul class="footer-links">
+                <li><a href="#">Privacy Policy</a></li>
+                <li><a href="#">Terms of Service</a></li>
+                <li><a href="#">Contact Us</a></li>
+            </ul>
+        </div>
+    </footer>
+
+    <script>
+        // Add scrolled class to navbar on scroll
+        window.addEventListener('scroll', function () {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jobfit Analyzer - Create Account</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #1a365d 0%, #2563eb 50%, #3b82f6 100%);
+        }
+
+        .card-gradient {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        .float-animation {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .popup {
+            position: fixed;
+            top: 20%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 9999;
+            display: none; /* Hidden by default */
+        }
+        .popup h3 {
+            color: #dc2626; /* Red text for error */
+            font-size: 1.25rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+        .popup button {
+            background-color: #2563eb; /* Blue button */
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            border: none;
+            cursor: pointer;
+            margin-left: 350px;
+        }
+        .popup button:hover {
+            background-color: #1e40af; /* Darker blue on hover */
+        }
+    </style>
+
+
+</head>
+
+<body class="gradient-bg min-h-screen flex flex-col items-center justify-center p-4">
+    <div class="max-w-6xl w-full flex flex-col md:flex-row gap-8 items-center">
+        <!-- Left side - Marketing Content -->
+        <div class="w-full md:w-1/2 text-white space-y-6">
+            <h1 class="text-5xl font-bold leading-tight">
+                Start Your <br>
+                <span class="text-blue-300">AI-Powered</span> <br>
+                Hiring Journey
+            </h1>
+
+            <div class="space-y-4">
+                <div class="flex items-center space-x-4">
+                    <div class="bg-blue-500/20 p-3 rounded-lg">
+                        <i class="fas fa-clock text-yellow-400 text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-lg">14-Day Free Trial</h3>
+                        <p class="text-blue-200">No credit card required</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-4">
+                    <div class="bg-blue-500/20 p-3 rounded-lg">
+                        <i class="fas fa-users text-purple-400 text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-lg">Team Collaboration</h3>
+                        <p class="text-blue-200">Invite unlimited team members</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-4">
+                    <div class="bg-blue-500/20 p-3 rounded-lg">
+                        <i class="fas fa-headset text-green-400 text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-lg">24/7 Support</h3>
+                        <p class="text-blue-200">Expert help when you need it</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white/10 p-4 rounded-lg backdrop-blur">
+                <div class="flex items-center space-x-3">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTTnMicx5swLc0dA8qXc14MNn8aeHUJ1AMGkQ&s"
+                        alt="Customer Avatar" class="rounded-full">
+                    <div>
+                        <p class="text-sm text-blue-200">"Jobfit Analyzer transformed our hiring process. We've reduced our
+                            time-to-hire by 70% and found better candidates."</p>
+                        <p class="text-white font-semibold mt-2">Hacker</p>
+                        <p class="text-blue-200 text-sm">Take Help from , Hacker Group.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right side - Signup Form -->
+        <div class="w-full md:w-1/2 bg-white rounded-2xl shadow-2xl overflow-hidden">
+            <div class="p-8">
+                <div class="text-center mb-8">
+                    <div class="flex justify-center mb-4">
+                        <div class="card-gradient p-4 rounded-xl float-animation">
+                            <img src="https://st.depositphotos.com/54959856/54450/v/450/depositphotos_544509814-stock-illustration-initial-monogram-logo-esports-gaming.jpg"
+                                alt="ResumeAI Pro Logo" class="h-16 w-16">
+                        </div>
+                    </div>
+                    <h2 class="text-3xl font-bold text-gray-800">Create Your Account</h2>
+                    <p class="text-gray-600">Start your free trial today</p>
+                </div>
+
+                <form method="POST" action="{{ url_for('signup') }}" class="space-y-6">
+                    <div>
+                        <label for="username" class="block text-sm font-medium text-gray-700">Full Name</label>
+                        <div class="mt-1 relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="fas fa-user text-blue-500"></i>
+                            </div>
+                            <input id="username" name="username" type="text" required
+                                class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                                placeholder="Name">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-700">Work Email</label>
+                        <div class="mt-1 relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="fas fa-envelope text-blue-500"></i>
+                            </div>
+                            <input id="email" name="email" type="email" required
+                                class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                                placeholder="you@company.com">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                        <div class="mt-1 relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="fas fa-lock text-blue-500"></i>
+                            </div>
+                            <input id="password" name="password" type="password" required
+                                class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                                placeholder="Create a secure password">
+                        </div>
+                        <p class="mt-1 text-sm text-gray-500">Must be at least 8 characters</p>
+                    </div>
+
+                    <div>
+                        <button type="submit"
+                            class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white card-gradient hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-200">
+                            Start Your Free Trial
+                        </button>
+                    </div>
+                </form>
+
+                <div class="mt-6 text-center">
+                    <a href="{{ url_for('login') }}" class="text-blue-600 hover:text-blue-800 transition duration-200">
+                        Already have an account? <span class="font-semibold">Sign in</span>
+                    </a>
+                </div>
+            </div>
+
+            <div id="popup-message" class="popup">
+                <h3>Email Already Registered</h3>
+                <p>This email is already registered. Please use a different email.</p>
+                <button onclick="closePopup()">OK</button>
+            </div>
+
+            <div class="bg-gray-50 px-8 py-4">
+                <div class="flex justify-between items-center">
+                    <div class="flex items-center space-x-4">
+                        <img src="https://ih1.redbubble.net/image.1037331843.8520/raf,360x360,075,t,fafafa:ca443f4786.jpg"
+                            alt="Security Badge" class="h-8">
+                        <img src="https://w7.pngwing.com/pngs/676/295/png-transparent-iso-9000-iso-9001-2015-international-organization-for-standardization-certification-business-label-people-logo-thumbnail.png"
+                            alt="ISO Certified" class="h-8">
+                        <img src="https://upload.wikimedia.org/wikipedia/en/thumb/6/62/Centurion_University_of_Technology_and_Management_Logo.svg/1200px-Centurion_University_of_Technology_and_Management_Logo.svg.png"
+                            alt="Security Badge" class="h-8">
+                        <img src="https://cdn4.iconfinder.com/data/icons/logos-brands-7/512/google_logo-google_icongoogle-512.png"
+                            alt="Security Badge" class="h-8">
+                        <img src="https://banner2.cleanpng.com/20180609/jq/aa8dbj2or.webp" alt="Security Badge"
+                            class="h-8">
+                    </div>
+                    <div class="text-gray-500 text-sm">
+                        <i class="fas fa-shield-alt"></i> 256-bit encryption
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            // Check if email_exists is passed from the Flask backend
+            var emailExists = "{{ email_exists }}";
+            if (emailExists === "True") {
+                // Show the pop-up
+                document.getElementById("popup-message").style.display = "block";
+            }
+
+            // Function to close the pop-up
+            function closePopup() {
+                document.getElementById("popup-message").style.display = "none";
+            }
+        </script>
+    </div>
+</body>
+
+</html>

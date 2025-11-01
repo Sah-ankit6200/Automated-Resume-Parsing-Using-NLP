@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Jobfit Analyzer - Intelligent Resume Parsing</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #4e0263 0%, #2563eb 50%, #3b82f6 100%);
+        }
+
+        .card-gradient {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        .float-animation {
+            animation: float 3s ease-in-out infinite;
+        }
+    </style>
+</head>
+
+<body class="gradient-bg min-h-screen flex flex-col items-center justify-center p-4">
+    <div class="max-w-6xl w-full flex flex-col md:flex-row gap-8 items-center">
+        <!-- Left side - Marketing Content -->
+        <div class="w-full md:w-1/2 text-white space-y-6">
+            <h1 class="text-5xl font-bold leading-tight">
+                Transform Your <br>
+                <span class="text-blue-300">Hiring Process</span> <br>
+                with AI
+            </h1>
+
+            <div class="space-y-4">
+                <div class="flex items-center space-x-4">
+                    <div class="bg-blue-500/20 p-3 rounded-lg">
+                        <i class="fas fa-bolt text-yellow-400 text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-lg">Lightning Fast</h3>
+                        <p class="text-blue-200">Parse 1000+ resumes in minutes</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-4">
+                    <div class="bg-blue-500/20 p-3 rounded-lg">
+                        <i class="fas fa-brain text-purple-400 text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-lg">AI-Powered Analysis</h3>
+                        <p class="text-blue-200">Smart matching & skill extraction</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-4">
+                    <div class="bg-blue-500/20 p-3 rounded-lg">
+                        <i class="fas fa-chart-line text-green-400 text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-lg">Advanced Analytics</h3>
+                        <p class="text-blue-200">Data-driven hiring decisions</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex flex-wrap gap-2 pt-4">
+                <span class="bg-blue-500/20 text-blue-200 px-4 py-2 rounded-full text-sm">99.9% Accuracy</span>
+                <span class="bg-blue-500/20 text-blue-200 px-4 py-2 rounded-full text-sm">ATS Integration</span>
+                <span class="bg-blue-500/20 text-blue-200 px-4 py-2 rounded-full text-sm">GDPR Compliant</span>
+            </div>
+        </div>
+
+        <!-- Right side - Login Form -->
+        <div class="w-full md:w-1/2 bg-white rounded-2xl shadow-2xl overflow-hidden">
+            <div class="p-8">
+                <div class="text-center mb-8">
+                    <div class="flex justify-center mb-4">
+                        <div class="card-gradient p-4 rounded-xl float-animation">
+                            <img src="https://teeshopper.in/store_page_asset/images/RP_BROTHERS.SCEEN"
+                                alt="ResumeAI Pro Logo" class="h-16 w-16">
+                        </div>
+                    </div>
+                    <h2 class="text-3xl font-bold text-gray-800">Welcome Back</h2>
+                    <p class="text-gray-600">Log in to your Jobfit Analyzer account</p>
+                </div>
+
+                <form method="POST" action="{{ url_for('login') }}" class="space-y-6">
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-700">Email address</label>
+                        <div class="mt-1 relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="fas fa-envelope text-blue-500"></i>
+                            </div>
+                            <input id="email" name="email" type="email" required
+                                class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                                placeholder="you@company.com">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                        <div class="mt-1 relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="fas fa-lock text-blue-500"></i>
+                            </div>
+                            <input id="password" name="password" type="password" required
+                                class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                                placeholder="Enter your password">
+                        </div>
+                    </div>
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                    <div class="fixed top-5 right-5 z-50 space-y-2">
+                        {% for category, message in messages %}
+                        <div
+                            class="px-4 py-3 rounded-lg text-white font-semibold shadow-md
+                            {% if category == 'success' %} bg-green-500 {% elif category == 'danger' %} bg-red-500 {% else %} bg-blue-500 {% endif %}">
+                            {{ message }}
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    {% endwith %}
+
+
+                    <div>
+                        <button type="submit"
+                            class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white card-gradient hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-200">
+                            Sign in to your account
+                        </button>
+                    </div>
+                </form>
+
+                <div class="mt-6 text-center">
+                    <a href="{{ url_for('signup') }}" class="text-blue-600 hover:text-blue-800 transition duration-200">
+                        Don't have an account? <span class="font-semibold">Sign Up</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="bg-gray-50 px-8 py-4">
+                <div class="flex justify-between items-center">
+                    <div class="flex items-center space-x-4">
+                        <img src="https://ih1.redbubble.net/image.1037331843.8520/raf,360x360,075,t,fafafa:ca443f4786.jpg"
+                            alt="Security Badge" class="h-8">
+                        <img src="https://w7.pngwing.com/pngs/676/295/png-transparent-iso-9000-iso-9001-2015-international-organization-for-standardization-certification-business-label-people-logo-thumbnail.png"
+                            alt="ISO Certified" class="h-8">
+                        <img src="https://upload.wikimedia.org/wikipedia/en/thumb/6/62/Centurion_University_of_Technology_and_Management_Logo.svg/1200px-Centurion_University_of_Technology_and_Management_Logo.svg.png"
+                            alt="Security Badge" class="h-8">
+                        <img src="https://cdn4.iconfinder.com/data/icons/logos-brands-7/512/google_logo-google_icongoogle-512.png"
+                            alt="Security Badge" class="h-8">
+                        <img src="https://banner2.cleanpng.com/20180609/jq/aa8dbj2or.webp" alt="Security Badge"
+                            class="h-8">
+                    </div>
+                    <div class="text-gray-500 text-sm">
+                        <i class="fas fa-shield-alt"></i> Enterprise-grade security
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
